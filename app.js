@@ -8,6 +8,15 @@ class Despesa {
         this.valor = valor
     
     }
+
+    validarDados() {
+        for(let i in this) {
+            if(this[i] == undefined || this[i] == '' || this[i] == null) {
+                return false
+            }
+        }
+        return true
+    }
 }
 
 class Bd {
@@ -16,7 +25,7 @@ class Bd {
         let id = localStorage.getItem('id') 
 
         if (id === null) {
-            localStorage.setItem('id' = 0)
+            localStorage.setItem('id', 0)
         }
     }
 
@@ -32,7 +41,31 @@ class Bd {
 
         localStorage.setItem('id', id)
     }
+
+    recuperarTodosRegistros() {
+        let despesas = Array()
+
+        let id = localStorage.getItem('id')
+
+        //recuperar todas as dispesas cadastradas
+        for(let i = 1; i <= id; i++) {
+
+            //recuperar a despesa
+            let despesa = JASON.parse(localStorage.getItem(i))
+
+            if(despesa === null) {
+                continue
+            }
+
+            despesas.push(despesa)
+
+        }
+
+        return despesas
+    }
 }
+
+let bd = new Bd()
 
 
 function cadastrarDespesa () {
@@ -53,7 +86,32 @@ function cadastrarDespesa () {
         valor.value,
     )
     
-    function gravar (d) {
-        localStorage.setItem ('despesa', JSON.stringify(d))
+    if (despesa.validarDados()) {
+        bd.gravar(despesa)
+
+        document.getElementById('modal_titulo').innerHTML = 'Registro inserido com sucesso'
+        document.getElementById('modal_titulo_div').className = 'modal-header text-success'
+        document.getElementById('modal_conteudo').innerHTML = 'Despesa foi cadastrada com sucesso'
+        document.getElementById('modal_btn').innerHTML = 'Voltar'
+        document.getElementById('modal_titulo_div').className = 'modal-header text-success'
+
+        // dialogue sucess
+        $('#modalRegistroDespesas').modal('show')
+    } else {
+        document.getElementById('modal_titulo').innerHTML = 'Erro na inclusão do registro'
+        document.getElementById('modal_titulo_div').className = 'modal-header text-danger'
+        document.getElementById('modal_conteudo').innerHTML = 'Erro na Gravação verifique se todos os campos foram preenchidos'
+        document.getElementById('modal_btn').innerHTML = 'Voltar e corrigir'
+        document.getElementById('modal_titulo_div').className = 'modal-header text-danger'
+
+        //dialogue error
+        $('#modalRegistroDespesas').modal('show')
     }
+}
+
+function carregaListaDespesas() {
+
+    let despesas = Array()
+
+    bd.recuperarTodosRegistros()
 }
