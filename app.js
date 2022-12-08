@@ -97,6 +97,14 @@ function cadastrarDespesa () {
 
         // dialogue sucess
         $('#modalRegistroDespesas').modal('show')
+
+        ano.value = ''
+        mes.value = ''
+        dia.value = ''
+        tipo.value = ''
+        descricao.value = ''
+        valor.value = ''
+
     } else {
         document.getElementById('modal_titulo').innerHTML = 'Erro na inclusão do registro'
         document.getElementById('modal_titulo_div').className = 'modal-header text-danger'
@@ -113,5 +121,32 @@ function carregaListaDespesas() {
 
     let despesas = Array()
 
-    bd.recuperarTodosRegistros()
+    despesas = bd.recuperarTodosRegistros()
+
+    let listaDepesas = document.getElementById('listaDespesas')
+
+    despesas.forEach(function(d) {
+
+        let linha = listaDepesas.insertRow()
+
+        linha.insertCell(0).innerHTML = `${d.dia}/${d.mes}/${d.ano}`
+
+        switch(d.tipo) {
+            case '1' : d.tipo = 'Alimentação'
+                break
+            case '2' : d.tipo = 'Educação'
+                break
+            case '3' : d.tipo = 'Lazer'
+                break
+            case '4' : d.tipo = 'Saúde'
+                break
+            case '5' : d.tipo = 'Transporte'
+                break
+        }
+
+        linha.insertCell(1).innerHTML = d.tipo
+        linha.insertCell(2).innerHTML = d.descricao
+        linha.insertCell(3).innerHTML = d.valor
+
+    })
 }
