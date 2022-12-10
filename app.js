@@ -218,6 +218,6 @@ function pesquisaDespesas() {
 
     let despesas = bd.pesquisar(despesa)
 
-    this.cadastrarDespesa(despesas, true)
+    this.carregaListaDespesas(despesas, true)
 
 }
